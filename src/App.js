@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { GlobalStyle, themes } from "./themes";
+import { GlobalStyle } from "./styles";
 import axios from "axios";
 import './App.css';
 
@@ -99,7 +99,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
 
   return (
       <div className="container">
-        <button className="back-button" onClick={onSwitchToLogin}>Voltar</button> {/* Botão de "Voltar" */}
+        <button className="back-button" onClick={onSwitchToLogin}>Voltar</button> {}
         
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <input
@@ -130,7 +130,7 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
 
 const Products = () => {
     const [produtos, setProdutos] = useState([]);
-    const [view, setView] = useState(""); // Estado para controlar qual formulário exibir
+    const [view, setView] = useState("");
     const [nome, setNome] = useState("");
     const [quantidade, setQuantidade] = useState("");
     const [preco, setPreco] = useState("");
@@ -141,7 +141,6 @@ const Products = () => {
 
     const token = localStorage.getItem("token");
 
-    // Função para buscar produtos
     const fetchProdutos = async () => {
         try {
             const response = await axios.get("https://backend-aula.vercel.app/app/produtos", {
@@ -179,12 +178,12 @@ const Products = () => {
     const handleDelete = async (id) => {
         try {
             await axios.delete('https://backend-aula.vercel.app/app/produtos', {
-                data: { id: id }, // Enviar o ID no corpo, conforme o backend espera
+                data: { id: id }, 
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setProdutos(produtos.filter((produto) => produto._id !== id));  // Remove o produto da lista local
+            setProdutos(produtos.filter((produto) => produto._id !== id)); 
         } catch (err) {
             console.error("Erro ao deletar produto:", err);
             setError("Erro ao deletar produto.");
@@ -195,7 +194,7 @@ const Products = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const produto = {
-            id: idEditando, // Adiciona o id do produto que está sendo editado
+            id: idEditando, 
             nome,
             quantidade,
             preco,
@@ -205,7 +204,6 @@ const Products = () => {
 
         try {
             if (idEditando) {
-                // Editar produto
                 await axios.put(`https://backend-aula.vercel.app/app/produtos`, produto, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -213,7 +211,6 @@ const Products = () => {
                 });
                 setProdutos(produtos.map((p) => (p._id === idEditando ? { ...p, ...produto } : p)));
             } else {
-                // Adicionar novo produto
                 const response = await axios.post("https://backend-aula.vercel.app/app/produtos", produto, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -242,7 +239,7 @@ const Products = () => {
 
             {view === "listar" && (
                 <div>
-                    <h3>Produtos Cadastrados:</h3>
+                    <h3>Produtos Cadastrados</h3>
                     {produtos.length > 0 ? (
                         <div className="product-grid">
                             {produtos.map((produto) => (
@@ -267,9 +264,9 @@ const Products = () => {
                             ))}
                         </div>
                     ) : (
-                        <p>Nenhum produto cadastrado.</p>
+                        <p>Nenhum produto cadastrado</p>
                     )}
-                    <button className="back-button" onClick={() => setView("")}>Voltar</button> {/* Botão de "Voltar" */}
+                    <button className="back-button" onClick={() => setView("")}>Voltar</button> { }
                 </div>
             )}
 
@@ -284,8 +281,8 @@ const Products = () => {
                     <input type="text" placeholder="Imagem" value={imagem} onChange={(e) => setImagem(e.target.value)} required />
 
                     <div className="button-container">
-                        <button type="submit" className="action-button">Adicionar Produto</button>
-                        <button type="button" onClick={() => setView("")} className="action-button">Voltar</button>
+                        <button type="submit" className="button button-large">Adicionar Produto</button>
+                        <button type="button" onClick={() => setView("")} className="button button-large">Voltar</button>
                     </div>
                 </form>
             )}
@@ -299,8 +296,8 @@ const Products = () => {
                     <input type="text" placeholder="Imagem" value={imagem} onChange={(e) => setImagem(e.target.value)} required />
 
                     <div className="button-container">
-                        <button type="submit" className="action-button">Editar Produto</button>
-                        <button type="button" onClick={() => setView("")} className="action-button">Voltar</button>
+                        <button type="submit" className="button button-large">Editar Produto</button>
+                        <button type="button" onClick={() => setView("")} className="button button-large">Voltar</button>
                     </div>
                 </form>
             )}
@@ -315,7 +312,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
   const [ra, setRA] = useState(null);
-  const [theme, setTheme] = useState("dark");
+  const [theme] = useState("GlobalStyle");
 
   const handleLogin = (ra) => {
     setRA(ra);
@@ -329,13 +326,9 @@ function App() {
   const handleSwitchToLogin = () => {
     setIsRegistering(false);
   };
-
-  const toggleTheme = () => {
-      setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
-  };
-
+  
   return (
-      <ThemeProvider theme={themes[theme]}>
+      <ThemeProvider theme={GlobalStyle}>
           <GlobalStyle />
           <div>
               
